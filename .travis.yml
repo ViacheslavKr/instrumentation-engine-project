@@ -2,4 +2,4 @@ language: java
 jdk: openjdk11
 
 install:
-  - ./mvnw install -DskipTests=false -Dmaven.javadoc.skip=true -B -V
+  - ./mvn test -Dmaven.javadoc.skip=true -B -V
