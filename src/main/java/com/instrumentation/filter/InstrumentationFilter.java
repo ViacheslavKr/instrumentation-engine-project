@@ -14,38 +14,38 @@ import static com.instrumentation.engine.InstrumentationEngineConstants.INSTR_RE
 
 public class InstrumentationFilter implements Filter {
 
-	private final InstrumentationEngine instrumentationEngine;
+    private final InstrumentationEngine instrumentationEngine;
 
-	public InstrumentationFilter(InstrumentationEngine instrumentationEngine) {
-		this.instrumentationEngine = instrumentationEngine;
+    public InstrumentationFilter(InstrumentationEngine instrumentationEngine) {
+        this.instrumentationEngine = instrumentationEngine;
 
-	}
+    }
 
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
+    @Override
+    public void init(FilterConfig filterConfig) {
 
-	}
+    }
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-		throws IOException, ServletException {
-		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 
-		InstrumentationRecord instrumentationRecord = instrumentationEngine.buildInstrumentation().
-			method(HttpMethod.valueOf(httpRequest.getMethod())).
-			sessionId(httpRequest.getSession().getId()).
-			url(httpRequest.getRequestURI().substring(httpRequest.getContextPath().length())).
-			build();
+        InstrumentationRecord instrumentationRecord = instrumentationEngine.buildInstrumentation().
+                method(HttpMethod.valueOf(httpRequest.getMethod())).
+                sessionId(httpRequest.getSession().getId()).
+                url(httpRequest.getRequestURI().substring(httpRequest.getContextPath().length())).
+                build();
 
-		instrumentationRecord.start();
+        instrumentationRecord.start();
 
-		servletRequest.setAttribute(INSTR_RECORD_ATTR_NAME, instrumentationRecord);
+        servletRequest.setAttribute(INSTR_RECORD_ATTR_NAME, instrumentationRecord);
 
-		filterChain.doFilter(servletRequest, servletResponse);
-	}
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
 
-	@Override
-	public void destroy() {
+    @Override
+    public void destroy() {
 
-	}
+    }
 }
